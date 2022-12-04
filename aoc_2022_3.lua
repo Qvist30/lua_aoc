@@ -1,4 +1,4 @@
-local file = 'params_3_2.txt'
+file = 'params_3_2.txt'
 
 -- reads the file
 function read_file()
@@ -11,7 +11,7 @@ end
 
 -- new code
 
-local priorityArray = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+priorityArray = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 -- Part 1 function
 function part_one(lines)
@@ -52,7 +52,7 @@ function part_two(lines)
 end
 
 
-local lines = read_file()
+lines = read_file()
 print(part_one(lines))
 print('------------------')
 print(part_two(lines))
