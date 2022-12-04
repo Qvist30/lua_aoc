@@ -1,14 +1,4 @@
--- http://lua-users.org/wiki/FileInputOutput
-function file_exists(file)
-  local f = io.open(file, "rb")
-  if f then f:close() end
-  return f ~= nil
-end
-
--- get all lines from a file, returns an empty 
--- list/table if the file does not exist
 function lines_from(file)
-  if not file_exists(file) then return {} end
   local lines = {}
   for line in io.lines(file) do 
     lines[#lines + 1] = line
@@ -23,7 +13,6 @@ local lines = lines_from(file)
 local totalSum = 0
 
 local priorityArray = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
 for k,v in pairs(lines) do
   
   local firstHalf = string.sub(v, 1, #v/2)
