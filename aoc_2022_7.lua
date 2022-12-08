@@ -11,8 +11,7 @@ function starts(str,start)
    return string.sub(str,1,string.len(start))==start
 end
 
--- Part 1 function
-function part_one(lines)
+function createMap(lines)
   treeMap = {}
   currDir = ""
   for k,v in pairs(lines) do
@@ -22,15 +21,15 @@ function part_one(lines)
         if(dirName ~= "/") then
           if(dirName == "..") then
             currDir = string.match(currDir, "(.*/).*/")
-          else 
+          else
             currDir = currDir .. dirName .. "/"
           end
-        else 
+        else
           currDir = "/"
         end
         if(treeMap[currDir] == nil) then
           treeMap[currDir] = 0
-        end 
+        end
       end
     else if(string.find(v, "%d+")) then
       for i=1, #currDir do
@@ -41,6 +40,12 @@ function part_one(lines)
     end
    end
   end
+  return treeMap
+end
+
+-- Part 1 function
+function part_one(lines)
+  treeMap = createMap(lines)
   totalSum = 0
   for k, v in pairs(treeMap) do
     if(v <= 100000) then
@@ -54,36 +59,7 @@ end
 
 -- Part 2 function
 function part_two(lines)
-
-  treeMap = {}
-  currDir = ""
-  for k,v in pairs(lines) do
-    if starts(v, "$") then
-      if starts(v, "$ cd") then
-        dirName = string.match(v, ".* (.*)")
-        if(dirName ~= "/") then
-          if(dirName == "..") then
-            currDir = string.match(currDir, "(.*/).*/")
-          else 
-            currDir = currDir .. dirName .. "/"
-          end
-        else 
-          currDir = "/"
-        end
-        if(treeMap[currDir] == nil) then
-          treeMap[currDir] = 0
-        end 
-      end
-    else if(string.find(v, "%d+")) then
-      for i=1, #currDir do
-        if string.sub(currDir,i,i) == "/" then
-          treeMap[string.sub(currDir,1,i)] = treeMap[string.sub(currDir,1,i)] + tonumber(string.match(v, "%d+"))
-        end
-      end
-    end
-   end
-  end
-  
+  treeMap = createMap(lines) 
   usedSpace = treeMap["/"]
   unusedSpace = 70000000 - usedSpace
   neededSpace = 30000000 - unusedSpace
