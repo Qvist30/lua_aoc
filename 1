@@ -1,0 +1,252 @@
+-- reads the file
+function read_file(file)
+  local lines = {}
+  for line in io.lines(file) do 
+    lines[#lines + 1] = line
+  end
+  return lines
+end
+
+function starts(str,start)
+   return string.sub(str,1,string.len(start))==start
+end
+
+-- Part 1 function
+function part_one(lines)
+  hX, tX = 0, 0
+  hY, tY = 0, 0
+  visitedGrid = {}
+  visitedGrid[0] = {}
+  visitedGrid[0][0] = 1
+  for k, v in pairs(lines) do
+    --print(v)
+    if(starts(v, "U")) then
+      for i=1, tonumber(string.match(v, "%d+")) do
+        hX = hX+1
+        if(hX-tX > 1) then
+          tX = tX + 1
+          if(hY < tY) then
+            tY = tY -1
+          elseif(hY > tY) then
+            tY = tY +1  
+          end
+        end
+        if(visitedGrid[tX] == nil) then
+          visitedGrid[tX] = {}
+        end
+        visitedGrid[tX][tY] = 1
+        --print(tX .." " .. tY)
+      end
+    end
+    if(starts(v, "R")) then
+      for i=1, tonumber(string.match(v, "%d+")) do
+        hY = hY+1
+        if(hY-tY > 1) then
+          tY = tY + 1
+          if(hX < tX) then
+            tX = tX -1
+          elseif(hX > tX) then
+            tX = tX +1  
+          end
+        end
+        if(visitedGrid[tX] == nil) then
+          visitedGrid[tX] = {}
+        end
+        visitedGrid[tX][tY] = 1
+        --print(tX .." " .. tY)
+      end
+    end
+    if(starts(v, "D")) then
+      for i=1, tonumber(string.match(v, "%d+")) do
+        hX = hX-1
+        if(tX - hX > 1) then
+          tX = tX - 1
+          if(hY < tY) then
+            tY = tY -1
+          elseif(hY > tY) then
+            tY = tY +1  
+          end
+        end
+        if(visitedGrid[tX] == nil) then
+          visitedGrid[tX] = {}
+        end
+        visitedGrid[tX][tY] = 1
+        --print(tX .." " .. tY)
+      end
+    end
+    if(starts(v, "L")) then
+      for i=1, tonumber(string.match(v, "%d+")) do
+        hY = hY-1
+        if(tY-hY > 1) then
+          tY = tY - 1
+          if(hX < tX) then
+            tX = tX -1
+          elseif(hX > tX) then
+            tX = tX +1  
+          end
+        end
+        if(visitedGrid[tX] == nil) then
+          visitedGrid[tX] = {}
+        end
+        visitedGrid[tX][tY] = 1
+        --print(tX .." " .. tY)
+      end
+    end
+  end
+  totalSum = 0
+  for k, v in pairs(visitedGrid) do
+    for x,y in pairs(visitedGrid[k]) do
+      if(visitedGrid[k][x] == 1) then
+        totalSum = totalSum + 1
+      end
+    end
+  end
+  return totalSum
+end
+
+function moveUp(x1, x2, y1, y2)
+  if(x1-x2 > 1) then
+   x2 = x2 + 1
+   if(y1 < y2) then
+     y2 = y2 -1
+   elseif(y1 > y2) then
+     y2 = y2 +1
+   end
+  end
+  return x1, x2, y1, y2
+end
+
+function moveRight(x0, x1, y0, y1)
+  if(y0-y1 > 1) then
+    y1 = y1+1
+    if(x0 < x1) then
+      x1 = x1 - 1
+    elseif(x1 < x0) then
+      x1 = x1 + 1
+    end
+  end
+  return x0, x1, y0, y1
+end
+
+function moveLeft(x0, x1, y0, y1)
+  if(y1-y0 > 1) then
+    y1 = y1 -1
+    if(x0 < x1) then
+      x1 = x1 - 1
+    elseif(x1 < x0) then
+      x1 = x1 + 1
+    end
+  end
+  return x0, x1, y0, y1
+end
+-- Part 2 function
+function part_two(lines)
+
+  hX, x1, x2, x3, x4, x5, x6, x7, x8, x9 = 0, 0, 0, 0, 0, 0, 0, 0, 0,0
+  hY, y1, y2, y3, y4, y5, y6, y7, y8, y9 = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  visitedGrid = {}
+  visitedGrid[0] = {}
+  visitedGrid[0][0] = 1
+  for k, v in pairs(lines) do
+    print(v)
+    if(starts(v, "U")) then
+      for i=1, tonumber(string.match(v, "%d+")) do
+        hX = hX +1
+        hX, x1, hY, y1 = moveUp(hX, x1, hY, y1)
+        x1, x2, y1, y2 = moveUp(x1, x2, y1, y2)
+        x2, x3, y2, y3 = moveUp(x2, x3, y2, y3)
+        x3, x4, y3, y4 = moveUp(x3, x4, y3, y4)
+        x4, x5, y4, y5 = moveUp(x4, x5, y4, y5)
+        x5, x6, y5, y6 = moveUp(x5, x6, y5, y6)
+        x6, x7, y6, y7 = moveUp(x6, x7, y6, y7)
+        x7, x8, y7, y8 = moveUp(x7, x8, y7, y8)
+        x8, x9, y8, y9 = moveUp(x8, x9, y8, y9) 
+        if(visitedGrid[x9] == nil) then
+          visitedGrid[x9] = {}
+        end
+        visitedGrid[x9][y9] = 1
+        print(x5.." " .. y5)
+      end
+    end    
+    if(starts(v, "R")) then
+      for i=1, tonumber(string.match(v, "%d+")) do
+        hY = hY+1
+        hX, x1, hY, y1 = moveRight(hX, x1, hY, y1)
+        x1, x2, y1, y2 = moveRight(x1, x2, y1, y2)
+        x2, x3, y2, y3 = moveRight(x2, x3, y2, y3)
+        x3, x4, y3, y4 = moveRight(x3, x4, y3, y4)
+        x4, x5, y4, y5 = moveRight(x4, x5, y4, y5)
+        x5, x6, y5, y6 = moveRight(x5, x6, y5, y6)
+        x6, x7, y6, y7 = moveRight(x6, x7, y6, y7)
+        x7, x8, y7, y8 = moveRight(x7, x8, y7, y8)
+        x8, x9, y8, y9 = moveRight(x8, x9, y8, y9) 
+        if(visitedGrid[x9] == nil) then
+          visitedGrid[x9] = {}
+        end
+        visitedGrid[x9][y9] = 1
+        print(x3.." " .. y3)
+      end
+    end
+    if(starts(v, "D")) then
+      for i=1, tonumber(string.match(v, "%d+")) do
+        hX = hX-1
+        if(tX - hX > 1) then
+          tX = tX - 1
+          if(hY < tY) then
+            tY = tY -1
+          elseif(hY > tY) then
+            tY = tY +1
+          end
+        end
+        if(visitedGrid[tX] == nil) then
+          visitedGrid[tX] = {}
+        end
+        visitedGrid[tX][tY] = 1
+        --print(tX .." " .. tY)
+      end
+    end   
+    if(starts(v, "L")) then
+      for i=1, tonumber(string.match(v, "%d+")) do
+        hY = hY-1
+        hX, x1, hY, y1 = moveLeft(hX, x1, hY, y1)
+        x1, x2, y1, y2 = moveLeft(x1, x2, y1, y2)
+        x2, x3, y2, y3 = moveLeft(x2, x3, y2, y3)
+        x3, x4, y3, y4 = moveLeft(x3, x4, y3, y4)
+        x4, x5, y4, y5 = moveLeft(x4, x5, y4, y5)
+        x5, x6, y5, y6 = moveLeft(x5, x6, y5, y6)
+        x6, x7, y6, y7 = moveLeft(x6, x7, y6, y7)
+        x7, x8, y7, y8 = moveLeft(x7, x8, y7, y8)
+        x8, x9, y8, y9 = moveLeft(x8, x9, y8, y9)
+        if(visitedGrid[x9] == nil) then
+          visitedGrid[x9] = {}
+        end
+        visitedGrid[x9][y9] = 1
+        print(x5 .." " .. y5)
+      end
+    end
+  end
+  totalSum = 0
+  for k, v in pairs(visitedGrid) do
+    for x,y in pairs(visitedGrid[k]) do
+      if(visitedGrid[k][x] == 1) then
+        totalSum = totalSum + 1
+      end
+    end
+  end
+  return totalSum  
+
+end
+
+
+file = 'params_9_1.txt'
+lines = read_file(file)
+print('Example Part 1: ' .. part_one(lines))
+file = 'params_9_3.txt'
+lines = read_file(file)
+print('Example Part 2: ' .. part_two(lines))
+
+print('--------------------------')
+file = 'params_9_2.txt'
+lines = read_file(file)
+print('Real Part 1: ' .. part_one(lines))
+--print('Real Part 2: ' .. part_two(lines))
